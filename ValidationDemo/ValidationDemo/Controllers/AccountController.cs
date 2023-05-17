@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ValidationDemo.Models;
 using ValidationDemo.Models.Account;
 using ValidationDemo.Utility.CustomExceptions;
 
@@ -27,16 +28,17 @@ namespace ValidationDemo.Controllers
                 {
                     throw new InvalidModelStateException(GetModelStateErrors());
                 }
+                TempData["success"] = "User created successfully!";
                 return RedirectToAction("Index", "Home");
             }
             catch (InvalidModelStateException imEx)
             {
-                ViewBag.Error = imEx.Errors.FirstOrDefault();
+                TempData["error"] = imEx.Errors.FirstOrDefault();
                 return View(newUser);
             }
             catch (Exception ex)
             {
-                ViewBag.error = ex.Message;
+                TempData["error"] = ex.Message;
                 return View(newUser);
             }
         }
